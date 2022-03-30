@@ -53,23 +53,6 @@ const startNode = async (win) => {
     console.log(ma.toString() + "/p2p/" + id.toB58String());
   });
 
-  let filename;
-
-  node.handle("/send-meta-data/1.0.0", async ({ stream }) => {
-    await pipe(stream, async function (source) {
-      let resString = "";
-      for await (const d of source) {
-        resString += d.toString().trim();
-      }
-      const res = JSON.parse(resString);
-      console.log(res);
-      if (res.type === "filename") {
-        filename = res.data;
-        filename += ".enc";
-      }
-    });
-    await pipe([accountNumber], stream);
-  });
   node.handle("/send-file/1.0.0", async ({ stream }) => {
     await pipe(stream, async function (source) {
       const bl = new BufferListStream();
@@ -78,7 +61,8 @@ const startNode = async (win) => {
         bl.append(msg);
       }
 
-      // console.log(bl._read(64));
+      const filehash = bl._bufs[0].slice(0, 64).toString().trim();
+      const filename = filehash + ".enc";
 
       // const readStream = streamifier.createReadStream()
 
