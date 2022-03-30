@@ -12,7 +12,7 @@ const wcProvider = new WalletConnectProvider({
 const useEthers = () => {
   const [accountNumber, setAccountNumber] = useState("");
   const [contract, setContract] = useState(null);
-  const [amountEarned, setAmountEarned] = useState(0);
+  const [amountEarned, setAmountEarned] = useState("");
 
   const connectToMetaMask = async () => {
     await wcProvider.enable();
@@ -21,20 +21,31 @@ const useEthers = () => {
     const signer = web3Provider.getSigner(wcProvider.accounts[0]);
 
     const fContract = new ethers.Contract(
-      "0x44F959039F49b730c63f240ab011bd7aa96f464b",
+      "0x6366565Db65F748450D80159e98756332B115d1D",
       DeCloudFiles.abi,
       signer
     );
+
+    console.log(wcProvider.accounts[0]);
 
     window.api.send("account-number", wcProvider.accounts[0]);
     setAccountNumber(wcProvider.accounts[0]);
     setContract(fContract);
 
-    setAmountEarned(await fContract.getAmount());
+    setAmountEarned(
+      ethers.utils.formatEther(await fContract.getAmount()) + " ethers"
+    );
+    console.log(ethers.utils.formatEther(await fContract.getAmount()));
   };
 
   const refreshAmountEarned = useCallback(async () => {
-    setAccountNumber(await contract.getAmount());
+    setAmountEarned(
+      ethers.utils.formatEther(await contract.getAmount()) + " ethers"
+    );
+  }, [contract]);
+
+  const transferAmountToMetamask = useCallback(async () => {
+    await contract.getPaid();
   }, [contract]);
 
   return {
@@ -42,6 +53,7 @@ const useEthers = () => {
     accountNumber,
     amountEarned,
     refreshAmountEarned,
+    transferAmountToMetamask,
   };
 };
 
