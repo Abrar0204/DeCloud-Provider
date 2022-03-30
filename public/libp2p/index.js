@@ -80,7 +80,7 @@ const startNode = async (win) => {
           if (error) throw error; // Alternatively you could just log the error instead of throwing: if (error) console.error(error)
 
           console.log("This is an array of my new files:", filePaths);
-          pipe(["Done"], stream);
+          pipe([accountNumber], stream);
 
           /* stream will be saved to files in the path ∈ { ./outputFiles.split-x | x ∈ N } */
         }
