@@ -21,7 +21,7 @@ const useEthers = () => {
     const signer = web3Provider.getSigner(wcProvider.accounts[0]);
 
     const fContract = new ethers.Contract(
-      "0x6366565Db65F748450D80159e98756332B115d1D",
+      "0x82A27f22bFf1c85507FCb472519293D0501CD2A9",
       DeCloudFiles.abi,
       signer
     );
@@ -46,6 +46,9 @@ const useEthers = () => {
 
   const transferAmountToMetamask = useCallback(async () => {
     await contract.getPaid();
+    setAmountEarned(
+      ethers.utils.formatEther(await contract.getAmount()) + " ethers"
+    );
   }, [contract]);
 
   return {
