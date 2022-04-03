@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@walletconnect/web3-provider": "^1.7.5",
     "bl": "^5.0.0",
+    "date-fns": "^2.28.0",
     "defaults-deep": "^0.2.4",
     "ethers": "^5.6.2",
     "framer-motion": "^3.10.6",

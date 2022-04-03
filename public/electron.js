@@ -21,8 +21,9 @@ createAppDirectory();
 // Create the native browser window.
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
+    icon: "./decloud.ico",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -34,6 +35,7 @@ function createWindow() {
   const appURL = app.isPackaged
     ? new URL(`file:${path.join(__dirname, "index.html")}`).toString()
     : "http://localhost:4000";
+
   mainWindow.loadURL(appURL);
   startNode(mainWindow);
 

@@ -79,6 +79,7 @@ const startNode = async (win) => {
           bl.append(msg);
         }
 
+        // const rounded = Math.ceil(bl.length / 5000000) * 5000000;
         const filehash = bl._bufs[0].slice(0, 64).toString().trim();
 
         //Removing filehash from the start of the stream
@@ -97,7 +98,7 @@ const startNode = async (win) => {
         // bl.pipe(writeStream);
         streamSplitter.split(
           bl,
-          102400,
+          500000,
           path.join(appDir, filename),
           (error, filePaths) => {
             /* If an error occured, filePaths will still contain all files that were written */
