@@ -98,7 +98,7 @@ const startNode = async (win) => {
         // bl.pipe(writeStream);
         streamSplitter.split(
           bl,
-          500000,
+          5000000,
           path.join(appDir, filename),
           (error, filePaths) => {
             /* If an error occured, filePaths will still contain all files that were written */

@@ -21,14 +21,13 @@ createAppDirectory();
 // Create the native browser window.
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
     icon: "./decloud.ico",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
   });
 
+  mainWindow.maximize();
   // In production, set the initial browser path to the local bundle generated
   // by the Create React App build process.
   // In development, set it to localhost to allow live/hot-reloading.
