@@ -6,7 +6,6 @@ const pipe = require("it-pipe");
 const { BufferListStream } = require("bl/bl");
 const streamSplitter = require("split-file-stream");
 const { ipcMain } = require("electron");
-
 const os = require("os");
 const appDir = path.resolve(os.homedir(), ".DeCloud");
 
@@ -63,8 +62,37 @@ const startNode = async (win) => {
           filePaths.push(`${appDir}/${fileHash}.enc.split-${i}`);
         }
 
+        for (let p of filePaths) {
+          if (!fs.existsSync(p)) {
+            pipe([JSON.stringify({ isNotFound: true, accountNumber })], stream);
+            return;
+          }
+        }
+
         streamSplitter.mergeFilesToStream(filePaths, (outStream) => {
           pipe(outStream, stream);
+        });
+      }
+    });
+  });
+
+  node.handle("/decloud/delete-file/1.0.0", async ({ stream }) => {
+    pipe(stream, async (source) => {
+      for await (const msg of source) {
+        const { fileHash, splitInto } = JSON.parse(msg.toString().trim());
+        console.log(fileHash, splitInto);
+        const filePaths = [];
+        for (let i = 0; i < splitInto; i++) {
+          filePaths.push(`${appDir}/${fileHash}.enc.split-${i}`);
+        }
+
+        filePaths.forEach((p) => {
+          fs.unlink(p, (err) => {
+            if (err) {
+              console.log(err);
+            }
+            console.log("Deleted ", p);
+          });
         });
       }
     });

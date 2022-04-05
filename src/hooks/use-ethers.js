@@ -3,6 +3,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { ethers } from "ethers";
 import DeCloudFiles from "../res/contracts/DeCloudFiles.json";
 
+const CONTRACT_ADDRESS = "0x57C3210D05Ef15d30e7d62B413E6D5285Bb3F094";
 const wcProvider = new WalletConnectProvider({
   rpc: {
     1337: "http://192.168.1.28:7545",
@@ -14,7 +15,7 @@ const ETH_TO_INR = 265629.35;
 const getObjFromEther = (etherEarned) => {
   const ether = parseFloat(etherEarned, 10);
   return {
-    inr: ether * ETH_TO_INR,
+    inr: (ether * ETH_TO_INR).toFixed(2),
     ether: ether,
   };
 };
@@ -32,11 +33,11 @@ const useEthers = () => {
   const totalAmount = useMemo(() => {
     let totEth = 0;
 
-    amountsEarned.forEach((item) => (totEth = item.amount.ether));
+    amountsEarned.forEach((item) => (totEth += item.amount.ether));
 
     return {
       ether: totEth,
-      inr: totEth * ETH_TO_INR,
+      inr: (totEth * ETH_TO_INR).toFixed(2),
     };
   }, [amountsEarned]);
 
@@ -47,15 +48,17 @@ const useEthers = () => {
     const signer = web3Provider.getSigner(wcProvider.accounts[0]);
 
     const fContract = new ethers.Contract(
-      "0x33237b27ef0Bf0a4C2F62C5f3AbDaE770f2252bb",
+      CONTRACT_ADDRESS,
       DeCloudFiles.abi,
       signer
     );
 
-    fContract.on("FileAdded", async (to) => {
-      if (to === wcProvider.accounts[0]) {
-        await refreshAmountEarned(fContract);
-      }
+    fContract.on("FileAdded", async () => {
+      await refreshAmountEarned(fContract);
+    });
+
+    fContract.on("FundsWithdrawn", async (to) => {
+      await refreshAmountEarned(fContract);
     });
 
     console.log(wcProvider.accounts[0]);
