@@ -6,6 +6,8 @@ const appDir = path.resolve(os.homedir(), ".DeCloud");
 const hidefile = require("hidefile");
 const { startNode } = require("./libp2p");
 
+app.disableHardwareAcceleration();
+
 const createAppDirectory = () => {
   if (!fs.existsSync(appDir)) {
     fs.mkdir(appDir, (err) => {

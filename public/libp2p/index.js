@@ -40,8 +40,12 @@ const startNode = async (win) => {
     console.log("[INFO] account number: ", accountNumber);
   });
 
+  node.on("peer:discovery", (peerId) => {
+    console.log(`[DISCOVERED]: ${peerId.toB58String()}`);
+  });
+
   node.connectionManager.on("peer:connect", (connection) => {
-    console.log("connected to: ", connection.remotePeer.toB58String());
+    console.log("[CONNECTED]:", connection.remotePeer.toB58String());
   });
 
   await node.start();
