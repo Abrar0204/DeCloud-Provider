@@ -3,10 +3,10 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { ethers } from "ethers";
 import DeCloudFiles from "../res/contracts/DeCloudFiles.json";
 
-const CONTRACT_ADDRESS = "0x57C3210D05Ef15d30e7d62B413E6D5285Bb3F094";
+const CONTRACT_ADDRESS = "0x864Ae94e9a73E982173E92baF9c300beE90Df04a";
 const wcProvider = new WalletConnectProvider({
   rpc: {
-    1337: "http://192.168.1.28:7545",
+    1337: "HTTP://192.168.43.177:7545",
   },
 });
 
